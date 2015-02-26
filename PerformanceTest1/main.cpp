@@ -4,8 +4,9 @@
 #include <FEHMotor.h>
 #include <FEHRPS.h>
 
-
-#define MOTOR_PERCENT 50
+#define COUNTS_PER_90_DEGREE 202
+#define CDS_THRESHOLD 2
+#define MOTOR_PERCENT 25
 #define COUNTS_PER_INCH 33.74
 #define INCH_TO_COUNTS(X) ((X) * COUNTS_PER_INCH)
 
@@ -13,6 +14,9 @@
 ButtonBoard buttons(FEHIO::Bank3);
 DigitalEncoder left_encoder(FEHIO::P0_0);
 DigitalEncoder right_encoder(FEHIO::P0_1);
+AnalogInputPin cds(FEHIO::P0_2);
+DigitalInputPin microswitch(FEHIO::P0_3);
+
 FEHMotor right_motor(FEHMotor::Motor0);
 FEHMotor left_motor(FEHMotor::Motor1);
 
@@ -228,24 +232,22 @@ int main(void)
     while(buttons.MiddlePressed()); //Wait for middle button to be unpressed
     RPS.InitializeMenu();
 
-    while (RPS.X() == -1 || RPS.Y() == -1);
-
     move_forward(MOTOR_PERCENT, INCH_TO_COUNTS(14)); //see function
-    Sleep(500);
-    check_y_minus(16.4);
-    turn_left(MOTOR_PERCENT, 108);
-    Sleep(500);
-    check_heading(90);
-    move_forward(MOTOR_PERCENT, INCH_TO_COUNTS(10));
-    Sleep(500);
-    check_x_plus(27.099);
-    turn_left(MOTOR_PERCENT, 108);
-    Sleep(500);
-    check_heading(180);
-    move_forward(MOTOR_PERCENT, INCH_TO_COUNTS(4));
-    Sleep(500);
-    check_y_plus(20.099);
-    check_heading(180);
+
+    check_y_minus(15.699);
+    turn_right(MOTOR_PERCENT, COUNTS_PER_90_DEGREE);
+
+    check_heading(270);
+    move_forward(-MOTOR_PERCENT, INCH_TO_COUNTS(12));
+
+    check_x_plus(27.199);
+    turn_left(MOTOR_PERCENT, COUNTS_PER_90_DEGREE);
+
+    check_heading(0);
+    move_forward(MOTOR_PERCENT, INCH_TO_COUNTS(8));
+
+    check_y_plus(23.401);
+    check_heading(0);
 
     return 0;
 }
