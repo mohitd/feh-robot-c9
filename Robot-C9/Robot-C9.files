@@ -2,3 +2,5 @@ main.cpp
 
 drivetrain.h
 drivetrain.cpp
+logger.h
+logger.cpp
