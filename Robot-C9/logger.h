@@ -15,8 +15,8 @@ public:
     void Display(ButtonBoard board);
 
 private:
-    static int i;
-    static Log_t array[1000];
+    int i = 0;
+    Log_t array[1000];
 };
 
 #endif // LOGGER_H

@@ -36,7 +36,11 @@ private:
 class DriveTrain
 {
 public:
-    DriveTrain(Logger& logger, FEHMotor *leftMotor, FEHMotor *rightMotor, DigitalEncoder *leftEncoder, DigitalEncoder *rightEncoder);
+    DriveTrain(Logger& logger, FEHMotor *leftMotor, FEHMotor *rightMotor, DigitalEncoder *leftEncoder, DigitalEncoder *rightEncoder)
+        : logger(logger), leftMotor(leftMotor), rightMotor(rightMotor), leftEncoder(leftEncoder), rightEncoder(rightEncoder)
+    {
+
+    }
 
     void Drive(FBDirection direction, int power, float distance);
     void Drive(FBDirection direction, int power, int counts);
@@ -44,8 +48,10 @@ public:
     void Turn(LRDirection direction, int power);
 
 private:
-    FEHMotor *leftMotor, *rightMotor;
-    DigitalEncoder *leftEncoder, *rightEncoder;
+    FEHMotor& leftMotor;
+    FEHMotor& rightMotor;
+    DigitalEncoder& leftEncoder;
+    DigitalEncoder& rightEncoder;
     Logger& logger;
 
     void ResetCounts();
