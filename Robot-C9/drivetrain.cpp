@@ -20,13 +20,13 @@ void DriveTrain::Drive(FBDirection direction, int power, int counts)
         break;
     }
     while ((leftEncoder.Counts() + rightEncoder.Counts()) * .5 < counts);
-    leftMotor->Stop();
-    rightMotor->Stop();
+    leftMotor.Stop();
+    rightMotor.Stop();
 }
 
 void DriveTrain::Drive(FBDirection direction, int power, float distance)
 {
-    Drive(direction, power, INCH_TO_COUNTS(distance));
+    Drive(direction, power, (int)INCH_TO_COUNTS(distance));
 }
 
 void DriveTrain::Turn(LRDirection direction, int power, int counts)

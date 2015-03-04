@@ -36,7 +36,7 @@ private:
 class DriveTrain
 {
 public:
-    DriveTrain(Logger& logger, FEHMotor *leftMotor, FEHMotor *rightMotor, DigitalEncoder *leftEncoder, DigitalEncoder *rightEncoder)
+    DriveTrain(Logger& logger, FEHMotor& leftMotor, FEHMotor& rightMotor, DigitalEncoder& leftEncoder, DigitalEncoder& rightEncoder)
         : logger(logger), leftMotor(leftMotor), rightMotor(rightMotor), leftEncoder(leftEncoder), rightEncoder(rightEncoder)
     {
 

@@ -3,7 +3,7 @@
 #include <FEHLCD.h>
 
 
-Logger::Display(ButtonBoard board)
+void Logger::Display(ButtonBoard board)
 {
 
 }

@@ -11,11 +11,15 @@ struct Log_t
 class Logger
 {
 public:
-    Logger();
+    Logger() : i(0)
+    {
+
+    }
+
     void Display(ButtonBoard board);
 
 private:
-    int i = 0;
+    int i;
     Log_t array[1000];
 };
 
