@@ -7,7 +7,7 @@
 #include "drivetrain.h"
 #include "logger.h"
 
-#define MOTOR_PERCENT 25
+#define MOTOR_PERCENT 40
 #define CDS_THRESHOLD 2
 
 //Declarations for encoders & motors
@@ -19,6 +19,7 @@ DigitalInputPin microswitch(FEHIO::P0_3);
 
 FEHMotor left_motor(FEHMotor::Motor0);
 FEHMotor right_motor(FEHMotor::Motor1);
+FEHMotor vex_motor(FEHMotor::Motor2);
 
 void check_x_plus(float x_coordinate) //using RPS while robot is in the +x direction
 {
@@ -152,7 +153,7 @@ void check_y_plus(float y_coordinate) //using RPS while robot is in the +y direc
     }
 }
 
-void check_heading(float heading) //using RPS
+void check_heading(DriveTrain& driveTrain, float heading) //using RPS
 {
     LCD.Write("Checking heading: ");
     LCD.WriteLine(heading);
@@ -163,11 +164,11 @@ void check_heading(float heading) //using RPS
         {
             if (RPS.Heading() >= 180)
             {
-                turn_left(10, 3);
+                driveTrain.Turn(LRDirection::Left, 10, 3);
             }
             else
             {
-                turn_right(10, 3);
+                driveTrain.Turn(LRDirection::Right, 10, 3);
             }
         }
     }
@@ -180,14 +181,81 @@ void check_heading(float heading) //using RPS
         if (RPS.Heading() > heading)
         {
             LCD.WriteLine("Too counterclockwise!");
-            turn_right(10, 2);
+            driveTrain.Turn(LRDirection::Right, 20, 3);
         }
         else if (RPS.Heading() < heading)
         {
             LCD.WriteLine("Too clockwise!");
-            turn_left(10, 2);
+            driveTrain.Turn(LRDirection::Left, 20, 3);
         }
         Sleep(500);
+    }
+}
+
+void col_turn_clockwise()
+{
+    right_motor.SetPercent(35);
+    left_motor.SetPercent(35);
+    Sleep(100);
+    vex_motor.SetPercent(50);
+    Sleep(3000);
+    vex_motor.Stop();
+    right_motor.Stop();
+    left_motor.Stop();
+}
+
+void col_turn_cclockwise()
+{
+    right_motor.SetPercent(35);
+    left_motor.SetPercent(35);
+    Sleep(100);
+    vex_motor.SetPercent(-50);
+    Sleep(3000);
+    vex_motor.Stop();
+    right_motor.Stop();
+    left_motor.Stop();
+}
+
+void press_buttons(FEHMotor& vex)
+{
+    if (RPS.RedButtonOrder() == 1)
+    {
+        if (RPS.WhiteButtonOrder() == 2)
+        {
+            col_turn_clockwise();
+        }
+        else if (RPS.BlueButtonOrder() == 2)
+        {
+            col_turn_cclockwise();
+        }
+    }
+    else if (RPS.WhiteButtonOrder() == 1)
+    {
+        vex.SetPercent(50);
+        Sleep(250);
+        vex.Stop();
+        if (RPS.RedButtonOrder() == 2)
+        {
+            col_turn_clockwise();
+        }
+        else if (RPS.BlueButtonOrder() == 2)
+        {
+            col_turn_cclockwise();
+        }
+    }
+    else if (RPS.BlueButtonOrder() == 1)
+    {
+        vex.SetPercent(-50);
+        Sleep(250);
+        vex.Stop();
+        if (RPS.WhiteButtonOrder() == 2)
+        {
+            col_turn_clockwise();
+        }
+        else if (RPS.RedButtonOrder() == 2)
+        {
+            col_turn_cclockwise();
+        }
     }
 }
 
@@ -196,16 +264,16 @@ int main(void)
     LCD.Clear(FEHLCD::Black);
     LCD.SetFontColor(FEHLCD::White);
 
-    Logger logger = new Logger();
-    DriveTrain driveTrain = new DriveTrain(logger, left_motor, right_motor, left_encoder, right_encoder);
+    LCD.WriteLine("Before DTrain");
+    DriveTrain *driveTrain = new DriveTrain(left_motor, right_motor, left_encoder, right_encoder);
 
     LCD.WriteLine("Press middle button");
     while(!buttons.MiddlePressed()); //Wait for middle button to be pressed
     while(buttons.MiddlePressed()); //Wait for middle button to be unpressed
     RPS.InitializeMenu();
 
-    LCD.WriteLine("Waiting for light...");
-    while (cds.Value() > 0.17);
+//    LCD.WriteLine("Waiting for light...");
+//    while (cds.Value() > 0.17);
 //    while (true)
 //    {
 //        LCD.Write("(");
@@ -218,44 +286,64 @@ int main(void)
 //        Sleep(1000);
 //    }
 
-    driveTrain.Drive(FBDirection::Forward, MOTOR_PERCENT, 14.0f);
+    driveTrain->Drive(FBDirection::Forward, MOTOR_PERCENT, 14.0f);
 
     LCD.Write("Heading: ");
     LCD.WriteLine(RPS.Heading());
 
     Sleep(1000);
     check_y_minus(15.699);
-    driveTrain.Turn(LRDirection::Left, MOTOR_PERCENT);
+    driveTrain->Turn(LRDirection::Left, MOTOR_PERCENT);
     LCD.Write("Heading: ");
     LCD.WriteLine(RPS.Heading());
 
     Sleep(1000);
-    check_heading(90);
-    driveTrain.Drive(FBDirection::Forward, MOTOR_PERCENT, 16.0f);
+    check_heading(*driveTrain, 90);
+    driveTrain->Drive(FBDirection::Forward, MOTOR_PERCENT, 10.0f);
     LCD.Write("Heading: ");
     LCD.WriteLine(RPS.Heading());
 
     Sleep(1000);
     check_x_plus(32.5);
-    driveTrain.Turn(LRDirection::Left, MOTOR_PERCENT);
+    driveTrain->Turn(LRDirection::Left, MOTOR_PERCENT);
     LCD.Write("Heading: ");
     LCD.WriteLine(RPS.Heading());
 
     Sleep(1000);
-    check_heading(179);
-    move_forward(MOTOR_PERCENT, INCH_TO_COUNTS(4));
+    check_heading(*driveTrain, 179);
+    driveTrain->Drive(FBDirection::Forward, MOTOR_PERCENT, 4.0f);
     LCD.Write("Heading: ");
     LCD.WriteLine(RPS.Heading());
 //    check_y_plus(23.401);
 //    check_heading(heading);
     Sleep(1000);
-    check_heading(178);
-    move_forward(40, INCH_TO_COUNTS(20));
+    check_heading(*driveTrain, 178);
+    driveTrain->Drive(FBDirection::Forward, 60, 20.0f);
     Sleep(1000);
-    check_y_plus(48);
-    check_heading(175);
-    move_forward(MOTOR_PERCENT, INCH_TO_COUNTS(10));
 
+    // Go to the buttons
+    check_heading(*driveTrain, 180);
+    check_y_plus(56);
+    Sleep(1000);
+    driveTrain->Turn(LRDirection::Left, MOTOR_PERCENT);
+    check_heading(*driveTrain, 270);
+    Sleep(1000);
+    driveTrain->Drive(FBDirection::Forward, MOTOR_PERCENT, 12.0f);
+    check_x_minus(21);
+    Sleep(1000);
+    driveTrain->Turn(LRDirection::Right, MOTOR_PERCENT, 55);
+    check_heading(*driveTrain, 230);
+    Sleep(1000);
+    driveTrain->Drive(FBDirection::Forward, 50, 5.0f);
+    check_heading(*driveTrain, 230);
+    Sleep(1000);
+    driveTrain->Drive(FBDirection::Forward, 50, 1.0f);
+    check_heading(*driveTrain, 230);
+
+    press_buttons(vex_motor);
+    LCD.WriteLine("Done!!!");
+
+    delete driveTrain;
     return 0;
 }
 

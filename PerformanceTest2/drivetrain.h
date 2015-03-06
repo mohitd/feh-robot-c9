@@ -4,8 +4,6 @@
 #include <FEHMotor.h>
 #include <FEHIO.h>
 
-#include "logger.h"
-
 struct LRDirection
 {
     enum Type
@@ -37,23 +35,22 @@ private:
 class DriveTrain
 {
 public:
-    DriveTrain(Logger& logger, FEHMotor& leftMotor, FEHMotor& rightMotor, DigitalEncoder& leftEncoder, DigitalEncoder& rightEncoder)
-        : logger(logger), leftMotor(leftMotor), rightMotor(rightMotor), leftEncoder(leftEncoder), rightEncoder(rightEncoder)
+    DriveTrain(FEHMotor& leftMotor, FEHMotor& rightMotor, DigitalEncoder& leftEncoder, DigitalEncoder& rightEncoder)
+        : leftMotor(leftMotor), rightMotor(rightMotor), leftEncoder(leftEncoder), rightEncoder(rightEncoder)
     {
 
     }
 
-    void Drive(FBDirection direction, int power, float distance);
-    void Drive(FBDirection direction, int power, int counts);
-    void Turn(LRDirection direction, int power, int counts);
-    void Turn(LRDirection direction, int power);
+    void Drive(FBDirection direction, float percent, float distance);
+    void Drive(FBDirection direction, float percent, int counts);
+    void Turn(LRDirection direction, float percent, int counts);
+    void Turn(LRDirection direction, float percent);
 
 private:
     FEHMotor& leftMotor;
     FEHMotor& rightMotor;
     DigitalEncoder& leftEncoder;
     DigitalEncoder& rightEncoder;
-    Logger& logger;
 
     void ResetCounts();
 };

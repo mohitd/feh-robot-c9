@@ -8,17 +8,17 @@
 #define COUNTS_PER_INCH 33.74
 #define INCH_TO_COUNTS(X) ((X) * COUNTS_PER_INCH)
 
-void DriveTrain::Drive(FBDirection direction, int power, int counts)
+void DriveTrain::Drive(FBDirection direction, float percent, int counts)
 {
     ResetCounts();
     switch (direction) {
     case FBDirection::Forward:
-        leftMotor.SetPower(power);
-        rightMotor.SetPower(power);
+        leftMotor.SetPercent(percent);
+        rightMotor.SetPercent(percent);
         break;
     case FBDirection::Backward:
-        leftMotor.SetPower(-power);
-        rightMotor.SetPower(-power);
+        leftMotor.SetPercent(-percent);
+        rightMotor.SetPercent(-percent);
         break;
     default:
         break;
@@ -28,22 +28,22 @@ void DriveTrain::Drive(FBDirection direction, int power, int counts)
     rightMotor.Stop();
 }
 
-void DriveTrain::Drive(FBDirection direction, int power, float distance)
+void DriveTrain::Drive(FBDirection direction, float percent, float distance)
 {
-    Drive(direction, power, (int)INCH_TO_COUNTS(distance));
+    Drive(direction, percent, (int)INCH_TO_COUNTS(distance));
 }
 
-void DriveTrain::Turn(LRDirection direction, int power, int counts)
+void DriveTrain::Turn(LRDirection direction, float percent, int counts)
 {
     ResetCounts();
     switch (direction) {
     case LRDirection::Left:
-        leftMotor.SetPower(-power);
-        rightMotor.SetPower(power);
+        leftMotor.SetPercent(-percent);
+        rightMotor.SetPercent(percent);
         break;
     case LRDirection::Right:
-        leftMotor.SetPower(power);
-        rightMotor.SetPower(-power);
+        leftMotor.SetPercent(percent);
+        rightMotor.SetPercent(-percent);
         break;
     default:
         break;
@@ -54,9 +54,9 @@ void DriveTrain::Turn(LRDirection direction, int power, int counts)
     rightMotor.Stop();
 }
 
-void DriveTrain::Turn(LRDirection direction, int power)
+void DriveTrain::Turn(LRDirection direction, float percent)
 {
-    Turn(direction, power, COUNTS_PER_90_DEGREE);
+    Turn(direction, percent, COUNTS_PER_90_DEGREE);
 }
 
 void DriveTrain::ResetCounts()
