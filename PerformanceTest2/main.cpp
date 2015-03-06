@@ -194,9 +194,9 @@ void check_heading(DriveTrain& driveTrain, float heading) //using RPS
 
 void col_turn_clockwise()
 {
-    right_motor.SetPercent(35);
-    left_motor.SetPercent(35);
-    Sleep(100);
+    right_motor.SetPercent(27);
+    left_motor.SetPercent(27);
+    Sleep(800);
     vex_motor.SetPercent(50);
     Sleep(3000);
     vex_motor.Stop();
@@ -206,9 +206,9 @@ void col_turn_clockwise()
 
 void col_turn_cclockwise()
 {
-    right_motor.SetPercent(35);
-    left_motor.SetPercent(35);
-    Sleep(100);
+    right_motor.SetPercent(27);
+    left_motor.SetPercent(27);
+    Sleep(800);
     vex_motor.SetPercent(-50);
     Sleep(3000);
     vex_motor.Stop();
@@ -264,12 +264,17 @@ int main(void)
     LCD.Clear(FEHLCD::Black);
     LCD.SetFontColor(FEHLCD::White);
 
-    LCD.WriteLine("Before DTrain");
     DriveTrain *driveTrain = new DriveTrain(left_motor, right_motor, left_encoder, right_encoder);
 
     LCD.WriteLine("Press middle button");
     while(!buttons.MiddlePressed()); //Wait for middle button to be pressed
     while(buttons.MiddlePressed()); //Wait for middle button to be unpressed
+
+    LCD.WriteLine("Did you initialize the column? Y(R) N(L)");
+    while (!buttons.RightPressed());
+    while (buttons.RightPressed());
+    LCD.WriteLine("Good!");
+
     RPS.InitializeMenu();
 
 //    LCD.WriteLine("Waiting for light...");
@@ -329,7 +334,7 @@ int main(void)
     check_heading(*driveTrain, 270);
     Sleep(1000);
     driveTrain->Drive(FBDirection::Forward, MOTOR_PERCENT, 12.0f);
-    check_x_minus(21);
+    check_x_minus(22);
     Sleep(1000);
     driveTrain->Turn(LRDirection::Right, MOTOR_PERCENT, 55);
     check_heading(*driveTrain, 230);

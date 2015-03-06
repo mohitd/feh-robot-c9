@@ -12,7 +12,8 @@
  R:\fehqt\Proteus/EWL/EWL_C/include/cstdint \
  R:\fehqt\Proteus/EWL/EWL_C/include/limits_api.h \
  R:\fehqt\Proteus/EWL/EWL_C/include/ewl_lib_ext1.h Drivers/adc16.h \
- Libraries/FEHLCD.h R:\fehqt\Proteus/EWL/EWL_C/include/cstring \
+ Libraries/FEHLCD.h Libraries/FEHUtility.h \
+ R:\fehqt\Proteus/EWL/EWL_C/include/cstring \
  R:\fehqt\Proteus/EWL/EWL_C/include/null.h \
  R:\fehqt\Proteus/EWL/EWL_C/include/size_t.h \
  R:\fehqt\Proteus/EWL/EWL_C/include/ewl_rsize_t.h \
@@ -51,6 +52,8 @@ R:\fehqt\Proteus/EWL/EWL_C/include/ewl_lib_ext1.h:
 Drivers/adc16.h:
 
 Libraries/FEHLCD.h:
+
+Libraries/FEHUtility.h:
 
 R:\fehqt\Proteus/EWL/EWL_C/include/cstring:
 

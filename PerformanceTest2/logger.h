@@ -18,12 +18,14 @@ public:
 
     }
 
-    void Display(ButtonBoard board);
+    void Display(ButtonBoard& buttons);
     void Log(Log_t item);
 
 private:
     int i;
     Log_t array[10];
+
+    void DisplayLogItem(Log_t item);
 };
 
 #endif // LOGGER_H
