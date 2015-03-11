@@ -12,7 +12,12 @@
  R:\fehqt\Proteus/EWL/EWL_C/include/cstdint \
  R:\fehqt\Proteus/EWL/EWL_C/include/limits_api.h \
  R:\fehqt\Proteus/EWL/EWL_C/include/ewl_lib_ext1.h Libraries/FEHIO.h \
- Drivers/adc16.h Libraries/FEHUtility.h ..\/logger.h
+ Drivers/adc16.h ..\/logger.h Libraries/FEHUtility.h Libraries/FEHRPS.h \
+ Drivers/FEHXBee.h R:\fehqt\Proteus/EWL/EWL_C/include/cstring \
+ R:\fehqt\Proteus/EWL/EWL_C/include/null.h \
+ R:\fehqt\Proteus/EWL/EWL_C/include/size_t.h \
+ R:\fehqt\Proteus/EWL/EWL_C/include/ewl_rsize_t.h \
+ R:\fehqt\Proteus/EWL/EWL_C/include/string_api.h ..\/logger.h
 
 R:\fehqt\Proteus/EWL/EWL_C++/include/lib_ewl_c++.prefix:
 
@@ -50,6 +55,22 @@ Libraries/FEHIO.h:
 
 Drivers/adc16.h:
 
+..\/logger.h:
+
 Libraries/FEHUtility.h:
+
+Libraries/FEHRPS.h:
+
+Drivers/FEHXBee.h:
+
+R:\fehqt\Proteus/EWL/EWL_C/include/cstring:
+
+R:\fehqt\Proteus/EWL/EWL_C/include/null.h:
+
+R:\fehqt\Proteus/EWL/EWL_C/include/size_t.h:
+
+R:\fehqt\Proteus/EWL/EWL_C/include/ewl_rsize_t.h:
+
+R:\fehqt\Proteus/EWL/EWL_C/include/string_api.h:
 
 ..\/logger.h:

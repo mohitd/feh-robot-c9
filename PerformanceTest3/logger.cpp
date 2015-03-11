@@ -6,6 +6,7 @@
 
 void Logger::Display(ButtonBoard& buttons)
 {
+    LCD.Clear();
     LCD.WriteLine("Press the L and R buttons");
     LCD.WriteLine("to cycle through logs");
     LCD.WriteLine("M to continue/exit");

@@ -3,6 +3,7 @@
 
 #include <FEHMotor.h>
 #include <FEHIO.h>
+#include "logger.h"
 
 struct LRDirection
 {

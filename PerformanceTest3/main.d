@@ -14,7 +14,7 @@
  R:\fehqt\Proteus/EWL/EWL_C/include/ewl_lib_ext1.h Libraries/FEHIO.h \
  Drivers/adc16.h Libraries/FEHUtility.h Libraries/FEHMotor.h \
  Libraries/FEHRPS.h Drivers/FEHXBee.h ..\/drivetrain.h ..\/logger.h \
- ..\/cage.h
+ ..\/logger.h ..\/cage.h
 
 R:\fehqt\Proteus/EWL/EWL_C++/include/lib_ewl_c++.prefix:
 
@@ -59,6 +59,8 @@ Libraries/FEHRPS.h:
 Drivers/FEHXBee.h:
 
 ..\/drivetrain.h:
+
+..\/logger.h:
 
 ..\/logger.h:
 

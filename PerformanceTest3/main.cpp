@@ -8,6 +8,7 @@
 #include "logger.h"
 #include "cage.h"
 
+#define TIMEOUT 5
 #define MOTOR_PERCENT_CHECKS 25
 #define MOTOR_PERCENT 40
 #define CDS_THRESHOLD 2
@@ -171,17 +172,18 @@ void check_heading(DriveTrain& driveTrain, float heading) //using RPS
     LCD.Write("Checking heading: ");
     LCD.WriteLine(heading);
 
+    double start = TimeNow();
     if (heading == 0)
     {
-        while (RPS.Heading() < 2 || RPS.Heading() > 358)
+        while ((RPS.Heading() > 1 || RPS.Heading() < 359) && TimeNow() - start < TIMEOUT)
         {
             if (RPS.Heading() >= 180)
             {
-                driveTrain.Turn(LRDirection::Left, 10, 3);
+                driveTrain.Turn(LRDirection::Left, 20, 3);
             }
             else
             {
-                driveTrain.Turn(LRDirection::Right, 10, 3);
+                driveTrain.Turn(LRDirection::Right, 20, 3);
             }
         }
     }
@@ -189,19 +191,18 @@ void check_heading(DriveTrain& driveTrain, float heading) //using RPS
     //you will need to fill out this one yourself and take into account
     //the edge conditions (when you want the robot to go to 0 degrees
     //or close to 0 degrees)
-    while (RPS.Heading() < heading - 0.5 || RPS.Heading() > heading + 0.5)
+    while (RPS.Heading() < heading - 1 || RPS.Heading() > heading + 1 || TimeNowSec() - start > TIMEOUT)
     {
         if (RPS.Heading() > heading)
         {
             LCD.WriteLine("Too counterclockwise!");
-            driveTrain.Turn(LRDirection::Right, 20, 3);
+            driveTrain.Turn(LRDirection::Right, MOTOR_PERCENT_CHECKS, 3);
         }
         else if (RPS.Heading() < heading)
         {
             LCD.WriteLine("Too clockwise!");
-            driveTrain.Turn(LRDirection::Left, 20, 3);
+            driveTrain.Turn(LRDirection::Left, MOTOR_PERCENT_CHECKS, 3);
         }
-        Sleep(200);
     }
 }
 
@@ -294,16 +295,21 @@ int main(void)
 //    LCD.WriteLine("Waiting for light...");
 //    while (cds.Value() > 0.17);
 
-
-    check_heading(*driveTrain, 0);
     driveTrain->Drive(FBDirection::Forward, MOTOR_PERCENT, 6.0f);
     check_y_minus(14);
     driveTrain->Turn(LRDirection::Left, MOTOR_PERCENT, 40);
     check_heading(*driveTrain, 45);
-    driveTrain->Drive(FBDirection::Forward, MOTOR_PERCENT, 6.5f);
+    driveTrain->Drive(FBDirection::Forward, MOTOR_PERCENT, 7.5f);
     check_heading(*driveTrain, 45);
     cage->Lower();
-    driveTrain->Drive(FBDirection::Backward, MOTOR_PERCENT, 6.0f);
+    driveTrain->Drive(FBDirection::Backward, MOTOR_PERCENT, 8.0f);
+    driveTrain->Turn(LRDirection::Right, MOTOR_PERCENT);
+    driveTrain->Drive(FBDirection::Backward, MOTOR_PERCENT, 14.0f);
+    driveTrain->Turn(LRDirection::Left, MOTOR_PERCENT, 80);
+    check_heading(*driveTrain, 0);
+    check_y_minus(24.5);
+    driveTrain->Drive(FBDirection::Backward, 60, 18.0f);
+    check_y_minus(42.5);
 //    driveTrain->Turn(LRDirection::Right, MOTOR_PERCENT);
 //    driveTrain->Drive(FBDirection::Backward, MOTOR_PERCENT, 8.0f);
 //    driveTrain->Turn(LRDirection::Left, MOTOR_PERCENT, 40);
