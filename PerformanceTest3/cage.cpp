@@ -9,7 +9,7 @@ void Cage::Lower()
         Sleep(500);
     }
     cageMotor.SetPercent(-50);
-    Sleep(1300);
+    Sleep(1500);
     cageMotor.Stop();
 }
 

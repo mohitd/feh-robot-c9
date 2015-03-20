@@ -11,13 +11,13 @@
 #define TIMEOUT 5
 #define MOTOR_PERCENT_CHECKS 25
 #define MOTOR_PERCENT 40
-#define CDS_THRESHOLD 2
+#define CDS_THRESHOLD 2.9
 
 //Declarations for encoders & motors
 ButtonBoard buttons(FEHIO::Bank3);
 DigitalEncoder left_encoder(FEHIO::P0_0);
 DigitalEncoder right_encoder(FEHIO::P0_1);
-AnalogInputPin cds(FEHIO::P0_2);
+AnalogInputPin cds(FEHIO::P2_7);
 DigitalInputPin microswitch(FEHIO::P0_3);
 
 DigitalInputPin cageSwitch(FEHIO::P1_1);
@@ -172,36 +172,37 @@ void check_heading(DriveTrain& driveTrain, float heading) //using RPS
     LCD.Write("Checking heading: ");
     LCD.WriteLine(heading);
 
-    double start = TimeNow();
+    int start = TimeNowSec();
     if (heading == 0)
     {
-        while ((RPS.Heading() > 1 || RPS.Heading() < 359) && TimeNow() - start < TIMEOUT)
+        while ((RPS.Heading() < 358 || RPS.Heading() > 2) && (TimeNow() - start < TIMEOUT))
         {
             if (RPS.Heading() >= 180)
             {
-                driveTrain.Turn(LRDirection::Left, 20, 3);
+                driveTrain.Turn(LRDirection::Left, MOTOR_PERCENT_CHECKS, 3);
             }
             else
             {
-                driveTrain.Turn(LRDirection::Right, 20, 3);
+                driveTrain.Turn(LRDirection::Right, MOTOR_PERCENT_CHECKS, 3);
             }
+            LCD.Write("Heading: ");
+            LCD.WriteLine(RPS.Heading());
         }
     }
-
-    //you will need to fill out this one yourself and take into account
-    //the edge conditions (when you want the robot to go to 0 degrees
-    //or close to 0 degrees)
-    while (RPS.Heading() < heading - 1 || RPS.Heading() > heading + 1 || TimeNowSec() - start > TIMEOUT)
+    else
     {
-        if (RPS.Heading() > heading)
+        while (RPS.Heading() < heading - 2 || RPS.Heading() > heading + 2)
         {
-            LCD.WriteLine("Too counterclockwise!");
-            driveTrain.Turn(LRDirection::Right, MOTOR_PERCENT_CHECKS, 3);
-        }
-        else if (RPS.Heading() < heading)
-        {
-            LCD.WriteLine("Too clockwise!");
-            driveTrain.Turn(LRDirection::Left, MOTOR_PERCENT_CHECKS, 3);
+            if (RPS.Heading() > heading)
+            {
+                LCD.WriteLine("Too counterclockwise!");
+                driveTrain.Turn(LRDirection::Right, MOTOR_PERCENT_CHECKS, 3);
+            }
+            else if (RPS.Heading() < heading)
+            {
+                LCD.WriteLine("Too clockwise!");
+                driveTrain.Turn(LRDirection::Left, MOTOR_PERCENT_CHECKS, 3);
+            }
         }
     }
 }
@@ -292,42 +293,49 @@ int main(void)
 
     RPS.InitializeMenu();
 
-//    LCD.WriteLine("Waiting for light...");
-//    while (cds.Value() > 0.17);
+    LCD.WriteLine("Waiting for light...");
+    while (cds.Value() > CDS_THRESHOLD)
+    {
+        LCD.Write("CdS Value: ");
+        LCD.WriteLine(cds.Value());
+        Sleep(1000);
+    }
 
-    driveTrain->Drive(FBDirection::Forward, MOTOR_PERCENT, 6.0f);
+    driveTrain->Drive(FBDirection::Forward, MOTOR_PERCENT, 7.5f);
     check_y_minus(14);
     driveTrain->Turn(LRDirection::Left, MOTOR_PERCENT, 40);
-    check_heading(*driveTrain, 45);
-    driveTrain->Drive(FBDirection::Forward, MOTOR_PERCENT, 7.5f);
-    check_heading(*driveTrain, 45);
+    check_heading(*driveTrain, 47);
+    Sleep(3.0);
+    driveTrain->Drive(FBDirection::Forward, MOTOR_PERCENT, 9.0f);
+    check_heading(*driveTrain, 47);
     cage->Lower();
+    driveTrain->Drive(FBDirection::Forward, MOTOR_PERCENT_CHECKS, 5);
     driveTrain->Drive(FBDirection::Backward, MOTOR_PERCENT, 8.0f);
     driveTrain->Turn(LRDirection::Right, MOTOR_PERCENT);
-    driveTrain->Drive(FBDirection::Backward, MOTOR_PERCENT, 14.0f);
+    driveTrain->Drive(FBDirection::Backward, MOTOR_PERCENT, 13.5f);
     driveTrain->Turn(LRDirection::Left, MOTOR_PERCENT, 80);
     check_heading(*driveTrain, 0);
-    check_y_minus(24.5);
-    driveTrain->Drive(FBDirection::Backward, 60, 18.0f);
-    check_y_minus(42.5);
-//    driveTrain->Turn(LRDirection::Right, MOTOR_PERCENT);
-//    driveTrain->Drive(FBDirection::Backward, MOTOR_PERCENT, 8.0f);
-//    driveTrain->Turn(LRDirection::Left, MOTOR_PERCENT, 40);
-//    check_heading(*driveTrain, 0);
-//    check_y_minus(24.5);
-//    driveTrain->Drive(FBDirection::Backward, 60, 12.0f);
-//    check_y_minus(42.5);
-//    driveTrain->Drive(FBDirection::Backward, MOTOR_PERCENT, 4.0f);
-//    check_y_minus(56);
-//    driveTrain->Turn(LRDirection::Right, MOTOR_PERCENT);
-//    driveTrain->Drive(FBDirection::Forward, MOTOR_PERCENT, 12.0f);
-//    check_x_minus(6);
-//    driveTrain->Turn(LRDirection::Right, MOTOR_PERCENT, 20);
-//    check_heading(*driveTrain, 225);
+    check_y_minus(25);
+    driveTrain->Drive(FBDirection::Backward, 70, 35.0f);
+    check_y_minus(50);
+    driveTrain->Turn(LRDirection::Right, MOTOR_PERCENT);
+    check_heading(*driveTrain, 270);
+    driveTrain->Drive(FBDirection::Forward, MOTOR_PERCENT, 18.0f);
+    check_heading(*driveTrain, 270);
+    check_x_minus(12.5);
+    driveTrain->Turn(LRDirection::Right, MOTOR_PERCENT, 50);
+    check_heading(*driveTrain, 225);
+    cage->Raise();
+    driveTrain->Drive(FBDirection::Backward, MOTOR_PERCENT, 2.5f);
+    cage->Lower();
+    driveTrain->Drive(FBDirection::Forward, MOTOR_PERCENT, 8.0f);
+    driveTrain->Drive(FBDirection::Backward, MOTOR_PERCENT, 6.0f);
+    cage->Raise();
 
     LCD.WriteLine("Done!!!");
 
     delete driveTrain;
+    delete cage;
     return 0;
 }
 
