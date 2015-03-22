@@ -47,6 +47,10 @@ public:
     void Turn(LRDirection direction, float percent, int counts);
     void Turn(LRDirection direction, float percent);
 
+    void CheckX(float x, bool facingPlus);
+    void CheckY(float y, bool facingPlus);
+    void CheckHeading(float heading);
+
 private:
     FEHMotor& leftMotor;
     FEHMotor& rightMotor;
