@@ -12,7 +12,24 @@
  R:\fehqt\Proteus/EWL/EWL_C/include/cstdint \
  R:\fehqt\Proteus/EWL/EWL_C/include/limits_api.h \
  R:\fehqt\Proteus/EWL/EWL_C/include/ewl_lib_ext1.h Libraries/FEHIO.h \
- Drivers/adc16.h ..\/logger.h
+ Drivers/adc16.h Libraries/FEHUtility.h Libraries/FEHLCD.h \
+ Libraries/FEHRPS.h Drivers/FEHXBee.h \
+ R:\fehqt\Proteus/EWL/EWL_C/include/cstring \
+ R:\fehqt\Proteus/EWL/EWL_C/include/null.h \
+ R:\fehqt\Proteus/EWL/EWL_C/include/size_t.h \
+ R:\fehqt\Proteus/EWL/EWL_C/include/ewl_rsize_t.h \
+ R:\fehqt\Proteus/EWL/EWL_C/include/string_api.h \
+ R:\fehqt\Proteus/EWL/EWL_C/include/cmath \
+ R:\fehqt\Proteus/EWL/EWL_C/include/cfloat \
+ R:\fehqt\Proteus/EWL/EWL_C/include/ewl_t.h \
+ R:\fehqt\Proteus/EWL/EWL_C/include/arm/float.ARM.h \
+ R:\fehqt\Proteus/EWL/EWL_C/include/math_api.h \
+ R:\fehqt\Proteus/EWL/EWL_C/include/ewl_misra_types.h \
+ R:\fehqt\Proteus/EWL/EWL_C/include/math_inlines.h \
+ R:\fehqt\Proteus/EWL/EWL_C/include/math_config.h \
+ R:\fehqt\Proteus/EWL/EWL_C/include/arm/math.ARM.h \
+ R:\fehqt\Proteus/EWL/EWL_C/include/cerrno \
+ R:\fehqt\Proteus/EWL/EWL_C/include/math_integral.h
 
 R:\fehqt\Proteus/EWL/EWL_C++/include/lib_ewl_c++.prefix:
 
@@ -50,4 +67,42 @@ Libraries/FEHIO.h:
 
 Drivers/adc16.h:
 
-..\/logger.h:
+Libraries/FEHUtility.h:
+
+Libraries/FEHLCD.h:
+
+Libraries/FEHRPS.h:
+
+Drivers/FEHXBee.h:
+
+R:\fehqt\Proteus/EWL/EWL_C/include/cstring:
+
+R:\fehqt\Proteus/EWL/EWL_C/include/null.h:
+
+R:\fehqt\Proteus/EWL/EWL_C/include/size_t.h:
+
+R:\fehqt\Proteus/EWL/EWL_C/include/ewl_rsize_t.h:
+
+R:\fehqt\Proteus/EWL/EWL_C/include/string_api.h:
+
+R:\fehqt\Proteus/EWL/EWL_C/include/cmath:
+
+R:\fehqt\Proteus/EWL/EWL_C/include/cfloat:
+
+R:\fehqt\Proteus/EWL/EWL_C/include/ewl_t.h:
+
+R:\fehqt\Proteus/EWL/EWL_C/include/arm/float.ARM.h:
+
+R:\fehqt\Proteus/EWL/EWL_C/include/math_api.h:
+
+R:\fehqt\Proteus/EWL/EWL_C/include/ewl_misra_types.h:
+
+R:\fehqt\Proteus/EWL/EWL_C/include/math_inlines.h:
+
+R:\fehqt\Proteus/EWL/EWL_C/include/math_config.h:
+
+R:\fehqt\Proteus/EWL/EWL_C/include/arm/math.ARM.h:
+
+R:\fehqt\Proteus/EWL/EWL_C/include/cerrno:
+
+R:\fehqt\Proteus/EWL/EWL_C/include/math_integral.h:

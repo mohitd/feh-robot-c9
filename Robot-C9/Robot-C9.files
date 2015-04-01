@@ -2,5 +2,7 @@ main.cpp
 
 drivetrain.h
 drivetrain.cpp
-logger.h
-logger.cpp
+cage.h
+cage.cpp
+cdscell.h
+cdscell.cpp
