@@ -75,7 +75,7 @@ int main(void)
     driveTrain->CheckHeading(0);
     driveTrain->CheckY(23, false);
     Sleep(200);
-    driveTrain->Accelerate(FBDirection::Backward, MOTOR_PERCENT, 65, 2.0f);
+    driveTrain->Accelerate(FBDirection::Backward, MOTOR_PERCENT, 65, 2.90f);
     driveTrain->CheckY(50, false);
     driveTrain->CheckHeading(0);
     if (RPS.X() <= 30) driveTrain->CheckHeading(340);
@@ -89,7 +89,7 @@ int main(void)
     else if (RPS.X() >= 32) driveTrain->CheckHeading(20);
     while (abs(RPS.X() - 31) > 1) driveTrain->Drive(FBDirection::Backward, MOTOR_PERCENT, 5);
     driveTrain->CheckHeading(0);
-    driveTrain->Drive(FBDirection::Forward, MOTOR_PERCENT, 2.0f);
+    driveTrain->Drive(FBDirection::Forward, MOTOR_PERCENT, 3.0f);
 
     // Rotate the crank
     cage->RaiseHalf();
@@ -100,6 +100,8 @@ int main(void)
     while (crank_microswitch.Value());
     Sleep(200);
     cage_motor.Stop();    
+    driveTrain->Drive(FBDirection::Forward, MOTOR_PERCENT, 1.0f);
+    cage->Raise();
     driveTrain->Drive(FBDirection::Forward, MOTOR_PERCENT, 2.0f);
     cage->Lower();
 
@@ -120,8 +122,9 @@ int main(void)
 
     // To the buttons
     driveTrain->Turn(LRDirection::Right, MOTOR_PERCENT);
-    driveTrain->Drive(FBDirection::Forward, MOTOR_PERCENT, 4.0f);
+    driveTrain->Drive(FBDirection::Forward, MOTOR_PERCENT, 2.0f);
     driveTrain->Turn(LRDirection::Left, MOTOR_PERCENT);
+    driveTrain->CheckHeading(225);
 
     LCD.WriteLine("Done!");
 
