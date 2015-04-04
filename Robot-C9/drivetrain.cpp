@@ -14,10 +14,32 @@
 #define INCH_TO_COUNTS(X) ((X) * COUNTS_PER_INCH)
 #define RAD_TO_DEG(X) ((X) * 180 / M_PI)
 #define MOTOR_CORRECTION 1
-#define MOTOR_PERCENT_CHECKS 25
+#define MOTOR_PERCENT_CHECKS 40
 #define TIMEOUT 5
 
 using namespace std;
+
+void DriveTrain::Drive(FBDirection direction, float percent)
+{
+    switch (direction)
+    {
+    case FBDirection::Forward:
+        leftMotor.SetPercent(percent);
+        rightMotor.SetPercent(percent);
+        break;
+    case FBDirection::Backward:
+        leftMotor.SetPercent(-percent);
+        rightMotor.SetPercent(-percent);
+        break;
+    }
+}
+
+void DriveTrain::Stop()
+{
+    leftMotor.Stop();
+    rightMotor.Stop();
+}
+
 void DriveTrain::Drive(FBDirection direction, float percent, int counts)
 {
     Drive(direction, percent, percent, counts);
@@ -84,6 +106,15 @@ void DriveTrain::Turn(LRDirection direction, float percent)
     Turn(direction, percent, COUNTS_PER_90_DEGREE);
 }
 
+/*
+ * Never gonna give you up
+ * Never gonna let you down
+ * Never gonna run around and desert you
+ * Never gonna make you cry
+ * Never gonna say goodbye
+ * Never gonna tell a lie and hurt you
+ */
+
 void DriveTrain::Accelerate(FBDirection direction, float startPercent, float endPercent, float time)
 {
     int interval = (endPercent - startPercent) / time;
@@ -122,6 +153,8 @@ void DriveTrain::Accelerate(FBDirection direction, float startPercent, float end
     rightMotor.Stop();
 }
 
+// Bet that's still stuck in your head...
+
 void DriveTrain::CheckX(float x, bool facingPlus)
 {
     LCD.Write("Checking Y from ");
@@ -130,8 +163,16 @@ void DriveTrain::CheckX(float x, bool facingPlus)
     LCD.WriteLine(x);
 
     //check whether the robot is within an acceptable range
-    while(abs(x - RPS.X()) > .5)
+    int start = TimeNowSec();
+    while(abs(x - RPS.X()) > .5  && (TimeNowSec() - start < TIMEOUT))
     {
+        if (RPS.X() < 0)
+        {
+            LCD.SetFontColor(FEHLCD::Red);
+            LCD.WriteLine("!!!RPS DOWN!!!");
+            LCD.SetFontColor(FEHLCD::Green);
+            continue;
+        }
         if(RPS.X() > x)
         {
             //pulse the motors for a short duration in the correct direction
@@ -180,8 +221,16 @@ void DriveTrain::CheckY(float y, bool facingPlus)
     LCD.WriteLine(y);
 
     //check whether the robot is within an acceptable range
-    while(abs(y - RPS.Y()) > .5)
+    int start = TimeNowSec();
+    while(abs(y - RPS.Y()) > .5  && (TimeNowSec() - start < TIMEOUT))
     {
+        if (RPS.Y() < 0)
+        {
+            LCD.SetFontColor(FEHLCD::Red);
+            LCD.WriteLine("!!!RPS DOWN!!!");
+            LCD.SetFontColor(FEHLCD::Green);
+            continue;
+        }
         if(RPS.Y() > y)
         {
             //pulse the motors for a short duration in the correct direction
@@ -232,6 +281,13 @@ void DriveTrain::CheckHeading(float heading)
     int start = TimeNowSec();
     while (abs(RPS.Heading() - heading) > 1 && (TimeNowSec() - start < TIMEOUT))
     {
+        if (RPS.Heading() < 0)
+        {
+            LCD.SetFontColor(FEHLCD::Red);
+            LCD.WriteLine("!!!RPS DOWN!!!");
+            LCD.SetFontColor(FEHLCD::Green);
+            continue;
+        }
         if (abs(RPS.Heading() - heading) >= 180)
         {
             if (RPS.Heading() > heading)

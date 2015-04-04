@@ -101,6 +101,17 @@ public:
     void Drive(FBDirection direction, float leftPercent, float rightPercent, int counts);
 
     /**
+     * @brief Drive Start the motors
+     * @param percent Start both motors at both this percent
+     */
+    void Drive(FBDirection direction, float percent);
+
+    /**
+     * @brief Stop Stop both motors
+     */
+    void Stop(); // Hammertime!
+
+    /**
      * @brief Accelerate Accelerates the robot from one percent to another in a direction for a time.
      * This function linearly interpolates from @p startPercent to @p endPercent across @p time.
      *

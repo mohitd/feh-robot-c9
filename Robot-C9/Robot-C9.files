@@ -6,3 +6,7 @@ cage.h
 cage.cpp
 cdscell.h
 cdscell.cpp
+robot.h
+robot.cpp
+diagnostics.h
+diagnostics.cpp

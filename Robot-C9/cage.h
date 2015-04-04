@@ -28,20 +28,23 @@ public:
     }
 
     /**
-     * @brief Lower Lowers the cage
+     * @brief Lower Self-explanatory
      * Before the cage is lowered, since the function is dependent on time, Raise() is called first
      */
     void Lower();
 
     /**
-     * @brief Raise Raises the cage
+     * @brief Raise Self-explanatory
      */
     void Raise();
 
     /**
-     * @brief RaiseHalf Raises the cage halfway for the crank
+     * @brief RaiseHalf Self-explanatory
      */
     void RaiseHalf();
+
+    void Lower3_4();
+    void Lower1_4();
 
 private:
     FEHMotor& cageMotor;            /**< The motor that controls the cage and crank */

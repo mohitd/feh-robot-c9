@@ -34,3 +34,19 @@ void Cage::RaiseHalf()
     while (crank_switch.Value());
     cageMotor.Stop();
 }
+
+void Cage::Lower3_4()
+{
+    LCD.WriteLine("Lowering cage 3/4...");
+    cageMotor.SetPercent(-MOTOR_SPEED);
+    Sleep(1500);
+    cageMotor.Stop();
+}
+
+void Cage::Lower1_4()
+{
+    LCD.WriteLine("Lowering cage 1/4...");
+    cageMotor.SetPercent(-MOTOR_SPEED);
+    Sleep(1000);
+    cageMotor.Stop();
+}
