@@ -120,9 +120,9 @@ int main(void)
     while(buttons.MiddlePressed()); //Wait for middle button to be unpressed
 
     LCD.WriteLine("Column Initialized?");
-    LCD.WriteLine("Y(R) N(L)");
-    while (!buttons.RightPressed());
-    while (buttons.RightPressed());
+    LCD.WriteLine("Y(B) N(T)");
+    while (!buttons.LeftPressed());
+    while (buttons.LeftPressed());
     LCD.WriteLine("Good!");
 
 //    diagnostics->RunDiagnostics();
@@ -131,7 +131,9 @@ int main(void)
 
     // Begin! Pick up the salt bag
     cdsCell->WaitForLight();
-    driveTrain->Drive(FBDirection::Forward, 30, 15.0f);
+    driveTrain->Drive(FBDirection::Forward, 30, 10.0f);
+    driveTrain->CheckHeading(0);
+    driveTrain->Drive(FBDirection::Forward, MOTOR_PERCENT, 5.0f);
     driveTrain->CheckHeading(0);
     driveTrain->CheckY(14, false);
     driveTrain->Turn(LRDirection::Left, MOTOR_PERCENT, 103);
@@ -139,12 +141,14 @@ int main(void)
     driveTrain->CheckHeading(47);
     driveTrain->Drive(FBDirection::Forward, MOTOR_PERCENT, 8.0f);
     driveTrain->CheckHeading(47);
+    driveTrain->Drive(FBDirection::Forward, 60, 25);
     cage->Lower1_4();
 
     driveTrain->Drive(FBDirection::Forward, 25, 5);
     driveTrain->Drive(FBDirection::Backward, MOTOR_PERCENT, 8.0f);
     driveTrain->Turn(LRDirection::Right, MOTOR_PERCENT);
     driveTrain->Drive(FBDirection::Backward, MOTOR_PERCENT, 15.0f);
+    driveTrain->CheckX(27.5f, false);
     driveTrain->Turn(LRDirection::Left, MOTOR_PERCENT, 80);
 
     // At the base of the ramp
@@ -155,6 +159,8 @@ int main(void)
     driveTrain->Drive(FBDirection::Backward, 65);
     while (RPS.Y() < 35);
     driveTrain->Stop();
+
+    // At top of ramp
     driveTrain->CheckY(49, false);
     driveTrain->CheckHeading(0);
     bool adjusted = false;
@@ -172,22 +178,11 @@ int main(void)
     while (abs(RPS.X() - 30.5) > 0.5) driveTrain->Drive(FBDirection::Backward, MOTOR_PERCENT, 5);
     driveTrain->CheckHeading(0);
 
-    if (!adjusted) driveTrain->Drive(FBDirection::Backward, MOTOR_PERCENT, 4.0f);
-
-    adjusted = false;
-    if (RPS.X() < 30)
+    if (!adjusted)
     {
-        driveTrain->CheckHeading(285);
-        adjusted = true;
+        driveTrain->Drive(FBDirection::Backward, MOTOR_PERCENT, 6.0f);
+        driveTrain->CheckHeading(0);
     }
-    else if (RPS.X() > 31.5)
-    {
-        driveTrain->CheckHeading(75);
-        adjusted = true;
-    }
-    while (abs(RPS.X() - 30.5) > .5) driveTrain->Drive(FBDirection::Backward, MOTOR_PERCENT, 5);
-    driveTrain->CheckHeading(0);
-    if (!adjusted) driveTrain->Drive(FBDirection::Forward, MOTOR_PERCENT, 3.0f);
 
     // Rotate the crank
     driveTrain->CheckY(52.0f, false);
@@ -209,11 +204,16 @@ int main(void)
     // To the garage and deposit the salt bag
     driveTrain->Turn(LRDirection::Right, MOTOR_PERCENT);
     driveTrain->CheckHeading(270);
-    driveTrain->Drive(FBDirection::Forward, MOTOR_PERCENT, 16.0f);
+    driveTrain->Drive(FBDirection::Forward, MOTOR_PERCENT, 5.0f);
     driveTrain->CheckHeading(270);
+    driveTrain->Turn(LRDirection::Right, MOTOR_PERCENT, 102);
+    driveTrain->Drive(FBDirection::Forward, MOTOR_PERCENT, 5.0f);
+    driveTrain->Turn(LRDirection::Left, 50, 102);
+    driveTrain->CheckHeading(0);
+    driveTrain->Drive(FBDirection::Forward, MOTOR_PERCENT, 8.0f);
     driveTrain->CheckX(12.5, false);
     driveTrain->Turn(LRDirection::Right, MOTOR_PERCENT, 113);
-    driveTrain->CheckHeading(220);
+    driveTrain->CheckHeading(225);
     cage->Raise();
     driveTrain->Drive(FBDirection::Backward, MOTOR_PERCENT, 3.0f);
     cage->Lower();
@@ -223,14 +223,12 @@ int main(void)
 
     // To the buttons
     driveTrain->Turn(LRDirection::Right, MOTOR_PERCENT);
-    driveTrain->Drive(FBDirection::Forward, MOTOR_PERCENT, 4.0f);
+    driveTrain->Drive(FBDirection::Forward, MOTOR_PERCENT, 5.0f);
     driveTrain->Turn(LRDirection::Left, MOTOR_PERCENT);
     driveTrain->CheckHeading(225);
     driveTrain->Drive(FBDirection::Forward, MOTOR_PERCENT, 2.0f);
     driveTrain->CheckHeading(225);
-    driveTrain->Drive(FBDirection::Forward, MOTOR_PERCENT);
-    while (RPS.ButtonsPressed() < 1);
-    driveTrain->Stop();
+    press_buttons();
 
     // Down ramp
     driveTrain->Drive(FBDirection::Backward, MOTOR_PERCENT, 14.0f);
@@ -241,7 +239,7 @@ int main(void)
     driveTrain->Turn(LRDirection::Right, MOTOR_PERCENT);
     driveTrain->CheckHeading(0);
     driveTrain->Drive(FBDirection::Forward, 30, 16.0f);
-    driveTrain->CheckY(30, false);
+    driveTrain->CheckY(17, false);
 
     // To oil pump
     driveTrain->Turn(LRDirection::Right, MOTOR_PERCENT);

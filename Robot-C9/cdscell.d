@@ -12,7 +12,7 @@
  R:\fehqt\Proteus/EWL/EWL_C/include/cstdint \
  R:\fehqt\Proteus/EWL/EWL_C/include/limits_api.h \
  R:\fehqt\Proteus/EWL/EWL_C/include/ewl_lib_ext1.h Drivers/adc16.h \
- Libraries/FEHLCD.h
+ Libraries/FEHLCD.h Libraries/FEHUtility.h
 
 R:\fehqt\Proteus/EWL/EWL_C++/include/lib_ewl_c++.prefix:
 
@@ -49,3 +49,5 @@ R:\fehqt\Proteus/EWL/EWL_C/include/ewl_lib_ext1.h:
 Drivers/adc16.h:
 
 Libraries/FEHLCD.h:
+
+Libraries/FEHUtility.h:
