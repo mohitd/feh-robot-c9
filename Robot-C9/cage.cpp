@@ -48,6 +48,6 @@ void Cage::Lower1_4()
 {
     LCD.WriteLine("Lowering cage 1/4...");
     cageMotor.SetPercent(-MOTOR_SPEED);
-    Sleep(1500);    // Really weird how it's the exact same time to lower 1/4 as 3/4???
+    Sleep(1000);
     cageMotor.Stop();
 }

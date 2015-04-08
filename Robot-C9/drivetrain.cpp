@@ -13,7 +13,7 @@
 #define COUNTS_PER_INCH 33.74
 #define INCH_TO_COUNTS(X) ((X) * COUNTS_PER_INCH)
 #define RAD_TO_DEG(X) ((X) * 180 / M_PI)
-#define MOTOR_CORRECTION 3
+#define MOTOR_CORRECTION 2
 #define MOTOR_PERCENT_CHECKS 30
 #define TIMEOUT 5
 

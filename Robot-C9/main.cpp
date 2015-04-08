@@ -34,10 +34,11 @@ FEHMotor right_motor(FEHMotor::Motor1);
 FEHMotor col_motor(FEHMotor::Motor2);
 FEHMotor cage_motor(FEHMotor::Motor3);
 
+const int col_percent = 25;
 void col_turn_clockwise()
 {
-    right_motor.SetPercent(27);
-    left_motor.SetPercent(27);
+    right_motor.SetPercent(col_percent);
+    left_motor.SetPercent(col_percent);
     Sleep(800);
     col_motor.SetPercent(50);
     Sleep(3000);
@@ -48,8 +49,8 @@ void col_turn_clockwise()
 
 void col_turn_cclockwise()
 {
-    right_motor.SetPercent(27);
-    left_motor.SetPercent(27);
+    right_motor.SetPercent(col_percent);
+    left_motor.SetPercent(col_percent);
     Sleep(800);
     col_motor.SetPercent(-50);
     Sleep(3000);
@@ -148,7 +149,7 @@ int main(void)
     driveTrain->Drive(FBDirection::Backward, MOTOR_PERCENT, 8.0f);
     driveTrain->Turn(LRDirection::Right, MOTOR_PERCENT);
     driveTrain->Drive(FBDirection::Backward, MOTOR_PERCENT, 15.0f);
-    driveTrain->CheckX(26.0f, false);
+    driveTrain->CheckX(27.0f, false);
     driveTrain->Turn(LRDirection::Left, MOTOR_PERCENT, 80);
 
     // At the base of the ramp
@@ -164,18 +165,22 @@ int main(void)
     driveTrain->CheckY(49, false);
     driveTrain->CheckHeading(0);
     bool adjusted = false;
-    if (RPS.X() < 30)
+    float coord = 0;
+    if (RPS.X() < 29)
     {
         driveTrain->CheckHeading(285);
         adjusted = true;
+        coord = 29.5;
     }
-    else if (RPS.X() > 31)
+    else if (RPS.X() > 30)
     {
         driveTrain->CheckHeading(75);
         adjusted = true;
+        coord = 30.5;
     }
 
-    while (abs(RPS.X() - 30.5) >  .5) driveTrain->Drive(FBDirection::Backward, MOTOR_PERCENT, 5);
+    int start = TimeNowSec();
+    while (abs(RPS.X() - coord) > .5 && TimeNowSec() - start < 10) driveTrain->Drive(FBDirection::Backward, MOTOR_PERCENT, 5);
     driveTrain->CheckHeading(0);
 
     // Rotate the crank
@@ -183,19 +188,21 @@ int main(void)
     driveTrain->CheckY(52.0f, false);
     cage->RaiseHalf();
     driveTrain->CheckY(56.5, false);
+    driveTrain->Drive(FBDirection::Backward, 20);
     if (cdsCell->DetectColor() == Color::Blue)  cage_motor.SetPercent(-30);
     else cage_motor.SetPercent(30);
     Sleep(500);
     while (crank_microswitch.Value());
     Sleep(200);
-    cage_motor.Stop();    
+    cage_motor.Stop();
+    driveTrain->Stop();
 
     driveTrain->Drive(FBDirection::Forward, MOTOR_PERCENT, 1.0f);
     cage->Raise();
     driveTrain->Drive(FBDirection::Forward, MOTOR_PERCENT, 2.0f);
     cage->Lower();
     driveTrain->Drive(FBDirection::Backward, MOTOR_PERCENT, 1.0f);
-    driveTrain->CheckY(53.0f, false);
+    driveTrain->CheckY(52.5f, false);
 
     // To the garage and deposit the salt bag
     driveTrain->Turn(LRDirection::Right, MOTOR_PERCENT);
@@ -213,13 +220,13 @@ int main(void)
     cage->Raise();
 
     // To the buttons
-    driveTrain->Turn(LRDirection::Right, MOTOR_PERCENT);
-    driveTrain->CheckHeading(135);
-    float distance = sqrt(pow(RPS.X() - 16.8, 2) + pow(RPS.Y() - 58.5, 2));
-    LCD.Write("Distance: ");
-    LCD.WriteLine(distance);
-    driveTrain->Drive(FBDirection::Forward, MOTOR_PERCENT, distance);
-    driveTrain->Turn(LRDirection::Left, MOTOR_PERCENT);
+    driveTrain->Turn(LRDirection::Left, MOTOR_PERCENT, 102);
+    driveTrain->CheckHeading(270);
+    driveTrain->Drive(FBDirection::Backward, MOTOR_PERCENT, 3.0f);
+    driveTrain->CheckX(23.3, false);
+    driveTrain->Turn(LRDirection::Right, MOTOR_PERCENT, 102);
+    driveTrain->CheckHeading(225);
+    driveTrain->Drive(FBDirection::Forward, MOTOR_PERCENT, 2.0f);
     driveTrain->CheckHeading(225);
     driveTrain->Drive(FBDirection::Forward, MOTOR_PERCENT, 2.0f);
     driveTrain->CheckHeading(225);
@@ -232,8 +239,8 @@ int main(void)
     driveTrain->CheckX(32, true);
     driveTrain->Turn(LRDirection::Right, MOTOR_PERCENT);
     driveTrain->CheckHeading(0);
-    driveTrain->Drive(FBDirection::Forward, 30, 16.0f);
-    driveTrain->CheckY(17, false);
+    driveTrain->Drive(FBDirection::Forward, 30, 20.0f);
+    driveTrain->CheckY(15, false);
 
     // To oil pump
     driveTrain->Turn(LRDirection::Right, MOTOR_PERCENT);
@@ -241,14 +248,14 @@ int main(void)
     driveTrain->Drive(FBDirection::Forward, MOTOR_PERCENT, 4.0f);
     driveTrain->CheckX(14, false);
     driveTrain->Turn(LRDirection::Left, MOTOR_PERCENT, 102);
-    driveTrain->CheckHeading(320);
+    driveTrain->CheckHeading(310);
     cage->Lower1_4();
     do
     {
         driveTrain->Drive(FBDirection::Forward, 50, 4.0f);
         driveTrain->Stop();
         driveTrain->Drive(FBDirection::Backward, MOTOR_PERCENT, 4.0f);
-        driveTrain->CheckHeading(320);
+        driveTrain->CheckHeading(310);
     } while (RPS.OilPress() == 0);
 
     LCD.WriteLine("Done!");
