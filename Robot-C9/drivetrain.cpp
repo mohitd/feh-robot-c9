@@ -13,8 +13,8 @@
 #define COUNTS_PER_INCH 33.74
 #define INCH_TO_COUNTS(X) ((X) * COUNTS_PER_INCH)
 #define RAD_TO_DEG(X) ((X) * 180 / M_PI)
-#define MOTOR_CORRECTION 1
-#define MOTOR_PERCENT_CHECKS 40
+#define MOTOR_CORRECTION 3
+#define MOTOR_PERCENT_CHECKS 30
 #define TIMEOUT 5
 
 using namespace std;
@@ -74,7 +74,8 @@ void DriveTrain::Drive(FBDirection direction, float leftPercent, float rightPerc
         break;
     }
 
-    while ((leftEncoder.Counts() + rightEncoder.Counts()) * .5 < counts);
+    int start = TimeNowSec();
+    while ((leftEncoder.Counts() + rightEncoder.Counts()) * .5 < counts && TimeNowSec() - start < TIMEOUT);
     leftMotor.Stop();
     rightMotor.Stop();
     Sleep(100);
@@ -95,7 +96,8 @@ void DriveTrain::Turn(LRDirection direction, float percent, int counts)
         break;
     }
 
-    while ((leftEncoder.Counts() + rightEncoder.Counts()) * .5 < counts);
+    int start = TimeNowSec();
+    while ((leftEncoder.Counts() + rightEncoder.Counts()) * .5 < counts && TimeNowSec() - start < TIMEOUT);
     leftMotor.Stop();
     rightMotor.Stop();
     Sleep(100);
@@ -153,7 +155,7 @@ void DriveTrain::Accelerate(FBDirection direction, float startPercent, float end
     rightMotor.Stop();
 }
 
-// Bet that's still stuck in your head...
+// ...Bet that's still stuck in your head...
 
 void DriveTrain::CheckX(float x, bool facingPlus)
 {

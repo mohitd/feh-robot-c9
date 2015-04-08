@@ -5,6 +5,8 @@
 #include <FEHLCD.h>
 #include <FEHUtility.h>
 
+#include "cage.h"
+
 void Diagnostics::RunDiagnostics()
 {
     LCD.WriteLine("Runnign Diagnostics...");
@@ -82,26 +84,41 @@ void Diagnostics::TestSwitches()
     LCD.WriteLine("Testing switches...");
     bool switch1 = false, switch2 = false, switch3 = false;
 
-    if (cage.Value() == 1) LCD.WriteLine("CAGE NOT PRESSED!");
+    if (cageSwitch.Value() == 1) LCD.WriteLine("CAGE NOT PRESSED!");
     else switch1 = true;
-    if (crank.Value() == 0) LCD.WriteLine("CRANK PRESSED!");
+    if (crankSwitch.Value() == 0) LCD.WriteLine("CRANK PRESSED!");
     else switch2 = true;
-    if (col.Value() == 0) LCD.WriteLine("COL PRESSED");
+    if (colSwitch.Value() == 0) LCD.WriteLine("COL PRESSED");
     else switch3 = true;
 
     if (switch1 && switch2 && switch3) LCD.WriteLine("All good!");
 
     LCD.WriteLine("Unpress cage");
-    while (cage.Value() == 0);
+    while (cageSwitch.Value() == 0);
     LCD.WriteLine("Cage Ok!");
 
     LCD.WriteLine("Press crank");
-    while (crank.Value() == 1);
+    while (crankSwitch.Value() == 1);
     LCD.WriteLine("Crank Ok!");
 
     LCD.WriteLine("Press col");
-    while (col.Value() == 1);
+    while (colSwitch.Value() == 1);
     LCD.WriteLine("Col Ok!");
     LCD.WriteLine("\n");
     LCD.WriteLine("All switches work!");
+}
+
+void Diagnostics::TestCage()
+{
+    LCD.WriteLine("Testing Cage...");
+    LCD.WriteLine("Press M to stop");
+
+    Cage *cage = new Cage(cageMotor, cageSwitch, crankSwitch);
+    while (!buttonBoard.MiddlePressed())
+    {
+        cage->Raise();
+        Sleep(500);
+        cage->Lower();
+    }
+    delete cage;
 }

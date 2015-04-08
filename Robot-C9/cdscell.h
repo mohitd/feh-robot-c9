@@ -56,7 +56,7 @@ public:
     Color DetectColor();
 
 private:
-    AnalogInputPin& cds;    /**< The CdS cell to determine light and color */
+    AnalogInputPin& cds;    /**< A private variable of type AnalogInputPin& */
 };
 
 #endif // CDSCELL_H

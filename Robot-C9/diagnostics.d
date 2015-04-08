@@ -12,8 +12,7 @@
  R:\fehqt\Proteus/EWL/EWL_C/include/cstdint \
  R:\fehqt\Proteus/EWL/EWL_C/include/limits_api.h \
  R:\fehqt\Proteus/EWL/EWL_C/include/ewl_lib_ext1.h Libraries/FEHIO.h \
- Drivers/adc16.h ..\/robot.h ..\/drivetrain.h ..\/cdscell.h \
- Libraries/FEHLCD.h ..\/cage.h ..\/diagnostics.h Libraries/FEHUtility.h
+ Drivers/adc16.h Libraries/FEHLCD.h Libraries/FEHUtility.h ..\/cage.h
 
 R:\fehqt\Proteus/EWL/EWL_C++/include/lib_ewl_c++.prefix:
 
@@ -51,16 +50,8 @@ Libraries/FEHIO.h:
 
 Drivers/adc16.h:
 
-..\/robot.h:
-
-..\/drivetrain.h:
-
-..\/cdscell.h:
-
 Libraries/FEHLCD.h:
 
-..\/cage.h:
-
-..\/diagnostics.h:
-
 Libraries/FEHUtility.h:
+
+..\/cage.h:

@@ -12,6 +12,7 @@
 /**
  * @brief The LRDirection struct for left and right directions for turning.
  * This is really a hacked, safer version of an enum.
+ * Honestly an enum would have done it. I don't know what I was thinking overcomplicating this
  */
 struct LRDirection
 {
@@ -165,7 +166,7 @@ private:
     DigitalEncoder& rightEncoder;   /**< Right encoder of the robot (right Igwan encoder) */
 
     /**
-     * @brief ResetCounts For convenience, resets counts on @c leftEncoder and @c rightEncoder
+     * @brief ResetCounts Resets encoder counts
      */
     void ResetCounts();
 

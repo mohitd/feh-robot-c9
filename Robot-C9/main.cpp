@@ -113,7 +113,7 @@ int main(void)
     DriveTrain *driveTrain = new DriveTrain(left_motor, right_motor, left_encoder, right_encoder);
     CdSCell *cdsCell = new CdSCell(cds);
     Cage *cage = new Cage(cage_motor, cage_microswitch, crank_microswitch);
-    Diagnostics *diagnostics = new Diagnostics(buttons, left_motor, right_motor, left_encoder, right_encoder, cds, cage_microswitch, col_microswitch, crank_microswitch);
+    Diagnostics *diagnostics = new Diagnostics(buttons, left_motor, right_motor, cage_motor, col_motor, left_encoder, right_encoder, cds, cage_microswitch, col_microswitch, crank_microswitch);
 
     LCD.WriteLine("Press middle button");
     while(!buttons.MiddlePressed()); //Wait for middle button to be pressed
@@ -141,14 +141,14 @@ int main(void)
     driveTrain->CheckHeading(47);
     driveTrain->Drive(FBDirection::Forward, MOTOR_PERCENT, 8.0f);
     driveTrain->CheckHeading(47);
-    driveTrain->Drive(FBDirection::Forward, 60, 25);
+    driveTrain->Drive(FBDirection::Forward, 60, 10);
     cage->Lower1_4();
 
     driveTrain->Drive(FBDirection::Forward, 25, 5);
     driveTrain->Drive(FBDirection::Backward, MOTOR_PERCENT, 8.0f);
     driveTrain->Turn(LRDirection::Right, MOTOR_PERCENT);
     driveTrain->Drive(FBDirection::Backward, MOTOR_PERCENT, 15.0f);
-    driveTrain->CheckX(27.5f, false);
+    driveTrain->CheckX(26.0f, false);
     driveTrain->Turn(LRDirection::Left, MOTOR_PERCENT, 80);
 
     // At the base of the ramp
@@ -169,22 +169,17 @@ int main(void)
         driveTrain->CheckHeading(285);
         adjusted = true;
     }
-    else if (RPS.X() > 31.5)
+    else if (RPS.X() > 31)
     {
         driveTrain->CheckHeading(75);
         adjusted = true;
     }
 
-    while (abs(RPS.X() - 30.5) > 0.5) driveTrain->Drive(FBDirection::Backward, MOTOR_PERCENT, 5);
+    while (abs(RPS.X() - 30.5) >  .5) driveTrain->Drive(FBDirection::Backward, MOTOR_PERCENT, 5);
     driveTrain->CheckHeading(0);
 
-    if (!adjusted)
-    {
-        driveTrain->Drive(FBDirection::Backward, MOTOR_PERCENT, 6.0f);
-        driveTrain->CheckHeading(0);
-    }
-
     // Rotate the crank
+    driveTrain->Drive(FBDirection::Backward, MOTOR_PERCENT, 1.0f);
     driveTrain->CheckY(52.0f, false);
     cage->RaiseHalf();
     driveTrain->CheckY(56.5, false);
@@ -199,31 +194,31 @@ int main(void)
     cage->Raise();
     driveTrain->Drive(FBDirection::Forward, MOTOR_PERCENT, 2.0f);
     cage->Lower();
-    driveTrain->Drive(FBDirection::Forward, MOTOR_PERCENT, 1.0f);
+    driveTrain->Drive(FBDirection::Backward, MOTOR_PERCENT, 1.0f);
+    driveTrain->CheckY(53.0f, false);
 
     // To the garage and deposit the salt bag
     driveTrain->Turn(LRDirection::Right, MOTOR_PERCENT);
     driveTrain->CheckHeading(270);
-    driveTrain->Drive(FBDirection::Forward, MOTOR_PERCENT, 5.0f);
-    driveTrain->CheckHeading(270);
-    driveTrain->Turn(LRDirection::Right, MOTOR_PERCENT, 102);
-    driveTrain->Drive(FBDirection::Forward, MOTOR_PERCENT, 5.0f);
-    driveTrain->Turn(LRDirection::Left, 50, 102);
-    driveTrain->CheckHeading(0);
-    driveTrain->Drive(FBDirection::Forward, MOTOR_PERCENT, 8.0f);
-    driveTrain->CheckX(12.5, false);
+    driveTrain->Drive(FBDirection::Forward, MOTOR_PERCENT, 12.0f);
+    driveTrain->CheckX(10.5, false);
     driveTrain->Turn(LRDirection::Right, MOTOR_PERCENT, 113);
     driveTrain->CheckHeading(225);
+    driveTrain->Drive(FBDirection::Backward, MOTOR_PERCENT, 2.0f);
     cage->Raise();
     driveTrain->Drive(FBDirection::Backward, MOTOR_PERCENT, 3.0f);
     cage->Lower();
     driveTrain->Drive(FBDirection::Forward, MOTOR_PERCENT, 8.0f);
-    driveTrain->Drive(FBDirection::Backward, MOTOR_PERCENT, 6.0f);
+    driveTrain->Drive(FBDirection::Backward, MOTOR_PERCENT, 7.0f);
     cage->Raise();
 
     // To the buttons
     driveTrain->Turn(LRDirection::Right, MOTOR_PERCENT);
-    driveTrain->Drive(FBDirection::Forward, MOTOR_PERCENT, 5.0f);
+    driveTrain->CheckHeading(135);
+    float distance = sqrt(pow(RPS.X() - 16.8, 2) + pow(RPS.Y() - 58.5, 2));
+    LCD.Write("Distance: ");
+    LCD.WriteLine(distance);
+    driveTrain->Drive(FBDirection::Forward, MOTOR_PERCENT, distance);
     driveTrain->Turn(LRDirection::Left, MOTOR_PERCENT);
     driveTrain->CheckHeading(225);
     driveTrain->Drive(FBDirection::Forward, MOTOR_PERCENT, 2.0f);
@@ -234,7 +229,6 @@ int main(void)
     driveTrain->Drive(FBDirection::Backward, MOTOR_PERCENT, 14.0f);
     driveTrain->Turn(LRDirection::Right, MOTOR_PERCENT, 306);
     driveTrain->CheckHeading(90);
-    driveTrain->Drive(FBDirection::Forward, MOTOR_PERCENT, 6.0f);
     driveTrain->CheckX(32, true);
     driveTrain->Turn(LRDirection::Right, MOTOR_PERCENT);
     driveTrain->CheckHeading(0);
@@ -247,11 +241,15 @@ int main(void)
     driveTrain->Drive(FBDirection::Forward, MOTOR_PERCENT, 4.0f);
     driveTrain->CheckX(14, false);
     driveTrain->Turn(LRDirection::Left, MOTOR_PERCENT, 102);
-    driveTrain->CheckHeading(325);
+    driveTrain->CheckHeading(320);
     cage->Lower1_4();
-    driveTrain->Drive(FBDirection::Forward, 50);
-    while (RPS.OilPress() == 0);
-    driveTrain->Stop();
+    do
+    {
+        driveTrain->Drive(FBDirection::Forward, 50, 4.0f);
+        driveTrain->Stop();
+        driveTrain->Drive(FBDirection::Backward, MOTOR_PERCENT, 4.0f);
+        driveTrain->CheckHeading(320);
+    } while (RPS.OilPress() == 0);
 
     LCD.WriteLine("Done!");
 

@@ -9,6 +9,7 @@ void Cage::Lower()
     LCD.WriteLine("Lowering cage...");
     if (cage_switch.Value())
     {
+        // Raise the cage!
         Raise();
         Sleep(100);
     }
@@ -27,7 +28,7 @@ void Cage::Raise()
 
 void Cage::RaiseHalf()
 {
-    LCD.WriteLine("Raising cage halfway...");
+    LCD.WriteLine("Raising cage 1/2...");
     cageMotor.SetPercent(MOTOR_SPEED);
     while (crank_switch.Value());
     Sleep(500);
@@ -47,6 +48,6 @@ void Cage::Lower1_4()
 {
     LCD.WriteLine("Lowering cage 1/4...");
     cageMotor.SetPercent(-MOTOR_SPEED);
-    Sleep(1500);
+    Sleep(1500);    // Really weird how it's the exact same time to lower 1/4 as 3/4???
     cageMotor.Stop();
 }

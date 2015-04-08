@@ -43,7 +43,14 @@ public:
      */
     void RaiseHalf();
 
+    /**
+     * @brief Lower3_4 Lowers cage 3/4 of the total way
+     */
     void Lower3_4();
+
+    /**
+     * @brief Lower1_4 Lowers cage 1/4 of the total way
+     */
     void Lower1_4();
 
 private:

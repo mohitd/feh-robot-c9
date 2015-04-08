@@ -25,7 +25,6 @@
  R:\fehqt\Proteus/EWL/EWL_C/include/arm/math.ARM.h \
  R:\fehqt\Proteus/EWL/EWL_C/include/cerrno \
  R:\fehqt\Proteus/EWL/EWL_C/include/math_integral.h ..\/drivetrain.h \
- ..\/cdscell.h ..\/cage.h ..\/diagnostics.h ..\/robot.h ..\/drivetrain.h \
  ..\/cdscell.h ..\/cage.h ..\/diagnostics.h
 
 R:\fehqt\Proteus/EWL/EWL_C++/include/lib_ewl_c++.prefix:
@@ -95,16 +94,6 @@ R:\fehqt\Proteus/EWL/EWL_C/include/arm/math.ARM.h:
 R:\fehqt\Proteus/EWL/EWL_C/include/cerrno:
 
 R:\fehqt\Proteus/EWL/EWL_C/include/math_integral.h:
-
-..\/drivetrain.h:
-
-..\/cdscell.h:
-
-..\/cage.h:
-
-..\/diagnostics.h:
-
-..\/robot.h:
 
 ..\/drivetrain.h:
 
